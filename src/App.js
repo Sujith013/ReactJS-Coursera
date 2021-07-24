@@ -1,22 +1,17 @@
-import React from 'react';
-import { Navbar, NavbarBrand} from 'reactstrap';
+import React, {Component} from 'react';
+import Main from './components/MainComponent.js';
 import './App.css';
-import Menu from './components/MenuComponent.js';
 
-function App() {
+class App extends Component{
+
+  render() {
   return (
    
     <div>
-      <Navbar dark color="primary">
-        <div className="container">
-          <NavbarBrand href='/'>
-           my-app
-          </NavbarBrand>
-        </div>
-      </Navbar>
-      <Menu />
+    <Main />
     </div>
   );
+  }
 }
 
 export default App;
