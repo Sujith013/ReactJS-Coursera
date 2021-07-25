@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
 import React, {Component} from 'react';
+import Home from './HomeComponent.js';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Menu from './MenuComponent.js';
 import { DISHES } from '../shared/dishes.js';
 import DishDetailComponent from './DishDetailComponent.js';
+import {Switch, Route, Redirect} from 'react-router-dom';
 
 class Main extends Component{
   
@@ -14,39 +17,31 @@ class Main extends Component{
 
     this.state={
       dishes:DISHES,
-      selectedDish:null
     }
   }
 
-  onDishselect(dishID){
-    this.setState({
-    selectedDish:dishID
-    });
-}
-
-  dispdish(dishID)
-  {
-      if(dishID!=null)
-      return(
-        <DishDetailComponent SelectedDish={this.state.dishes.filter((dish)=>dish.id===this.state.selectedDish)[0]} />
-      );
-      else
-      return(
-          <div></div>
-      );
-  }
-
   render() {
-  return (
+  
+   const HomePage=()=>{
+
+     return(
+
+      <Home />
+
+     );
+   }
+
+    return (
    
     <div>
     <Header />
-      <Menu dishes={this.state.dishes} onClick={(dishID)=>this.onDishselect(dishID)} />
-      <div className="container">
-      {this.dispdish(this.state.selectedDish)}
+       <Switch>
+       <Route path="/home" component={HomePage} />
+       <Route exact path="/menu" component={()=><Menu dishes={this.state.dishes}/>} />
+       <Redirect to="/home" />
+       </Switch>      
       <Footer />
       </div>
-    </div>
   );
   }
 }
