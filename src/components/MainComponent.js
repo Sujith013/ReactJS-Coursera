@@ -5,6 +5,7 @@ import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 import Menu from './MenuComponent.js';
 import Contact from './ContactComponent.js';
+import Aboutus from './AboutComponent.js';
 import { DISHES } from '../shared/dishes.js';
 import { COMMENTS } from '../shared/comments';
 import { PROMOTIONS } from '../shared/promotions';
@@ -49,6 +50,13 @@ class Main extends Component{
     );
    }
 
+ 
+   const About=()=>{
+     return(
+       <Aboutus leaders={this.state.leaders} />
+     );
+   }
+
     return (
    
     <div>
@@ -58,6 +66,7 @@ class Main extends Component{
        <Route exact path="/menu" component={()=><Menu dishes={this.state.dishes}/>} />
        <Route path="/menu/:dishId" component={DishWithId} />
        <Route exact path="/Contactus" component={Contact} />
+       <Route exact path="/aboutus" component={About} />
        <Redirect to="/home" />
        </Switch>      
       <Footer />
