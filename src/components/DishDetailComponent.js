@@ -1,6 +1,94 @@
-import React from 'react';
-import {Media,Card,CardBody,CardTitle,CardText,CardImg,Breadcrumb,BreadcrumbItem} from 'reactstrap';
+import React,{Component} from 'react';
+import {Media,Card,CardBody,CardTitle,CardText,CardImg,Breadcrumb,BreadcrumbItem,Button,
+        Modal,ModalBody,ModalHeader,Label,Col,Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import {Control,LocalForm,Errors} from 'react-redux-form';
+
+const required=(val)=> val&& val.length;
+const maxLength=(len)=>(val)=>!(val)||(val.length<=len);
+const minLength=(len)=>(val)=>!(val)||(val.length>=len);
+
+class CommentForm extends Component{
+
+  // eslint-disable-next-line no-useless-constructor
+  constructor(props){
+    super(props);
+
+    this.state={
+      isModalOpen:false,
+    }
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  toggleModal() {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen
+    });
+  }
+
+  handleSubmit(values){
+    console.log('current state is :'+JSON.stringify(values));
+    alert('current state is :'+JSON.stringify(values));
+    this.toggleModal();
+}
+
+  render(){
+    return(
+      <div>
+      <Button onClick={this.toggleModal} className="btn-secondary"><span className="fa fa-pencil fa-lg"></span> Submit Comment</Button>{' '}
+       <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}  fade={false}>
+         <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
+         <ModalBody>
+         <LocalForm onSubmit={(values)=>this.handleSubmit(values)}>
+         <Row>
+         <Label htmlFor="Rating" md={2}>Rating</Label>
+         <Col md={{size:3, offset:1}}>
+                           <Control.select model=".Rating" className="form-control" name="Rating" >
+                               <option>1</option>
+                               <option>2</option>
+                               <option>3</option>
+                               <option>4</option>
+                               <option>5</option>
+                               <option>6</option>
+                           </Control.select> 
+                        </Col>
+                     </Row>
+                     <br/>
+         <Row className="form-group">
+              <Label htmlFor="firstname" md={2}>Firstname</Label>
+            <Col md={10}>
+              <Control.text  model="name" className="form-control" id="firstname" name="firstname" 
+              placeholder="firstname"  validators={{required,minLength:minLength(3),maxLength:maxLength(15)}} 
+                             />
+              <Errors className="text-danger" model="name" show="touched" 
+                messages={{
+                required:'Required',
+                minLength:'Must be greater than 2 characters',
+                maxLength:'Less than 15 characters'
+                }} />
+            </Col>
+          </Row>
+          <Row className="form-group">
+                         <Label htmlFor="feedback" md={2}>Your Feedback</Label>
+                         <Col md={10}>
+                             <Control.textarea model=".message" id="feedback" name="feedback" 
+                             placeholder="feedback" rows="6" className="form-control" 
+                             />
+                         </Col>
+                     </Row>
+                     <Row className="form-group">
+                         <Col md={{size:10, offset:2}}>
+                           <Button type="submit" color="primary">Submit</Button>
+                         </Col>
+                     </Row>
+         </LocalForm>
+         </ModalBody>
+       </Modal>
+       </div>
+    );
+  }
+}
 
 function Rendercmts({comments}){
 
@@ -16,7 +104,6 @@ function Rendercmts({comments}){
             <h4>--{comments.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comments.date)))}</h4>
         </Media>
         </Media>
-
       </div>
     );
   });
@@ -55,6 +142,10 @@ function DishDetail({dish,comments}){
       <Media body>
       <h4>Comments</h4>
       <Rendercmts comments={comments} />
+      <br/>
+      <div>
+      <CommentForm />
+      </div>
       </Media>
       </Media>
       </Media>
