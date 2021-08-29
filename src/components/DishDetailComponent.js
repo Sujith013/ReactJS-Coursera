@@ -28,8 +28,7 @@ class CommentForm extends Component{
   }
 
   handleSubmit(values){
-    console.log('current state is :'+JSON.stringify(values));
-    alert('current state is :'+JSON.stringify(values));
+    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
     this.toggleModal();
 }
 
@@ -44,7 +43,8 @@ class CommentForm extends Component{
          <Row>
          <Label htmlFor="Rating" md={2}>Rating</Label>
          <Col md={{size:3, offset:1}}>
-                           <Control.select model=".Rating" className="form-control" name="Rating" >
+                           <Control.select model=".rating" className="form-control" name="Rating" >
+                               <option></option>
                                <option>1</option>
                                <option>2</option>
                                <option>3</option>
@@ -58,7 +58,7 @@ class CommentForm extends Component{
          <Row className="form-group">
               <Label htmlFor="firstname" md={2}>Firstname</Label>
             <Col md={10}>
-              <Control.text  model="name" className="form-control" id="firstname" name="firstname" 
+              <Control.text  model=".name" className="form-control" id="firstname" name="firstname" 
               placeholder="firstname"  validators={{required,minLength:minLength(3),maxLength:maxLength(15)}} 
                              />
               <Errors className="text-danger" model="name" show="touched" 
@@ -116,7 +116,7 @@ function Rendercmts({comments}){
 
 }
 
-function DishDetail({dish,comments}){
+function DishDetail({dish,comments,addComment}){
 
   if(dish!=null)
      return(
@@ -144,7 +144,7 @@ function DishDetail({dish,comments}){
       <Rendercmts comments={comments} />
       <br/>
       <div>
-      <CommentForm />
+      <CommentForm addComment={addComment} dishId={dish.id} />
       </div>
       </Media>
       </Media>
